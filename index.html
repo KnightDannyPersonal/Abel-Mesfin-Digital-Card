@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Digital Card</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #cc0000;
+            --bg-color: #000000;
+            --card-bg: #111111;
+            --text-color: #ffffff;
+            --text-secondary: #aaaaaa;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Car icons background pattern */
+        .bg-icons {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 20px;
+            padding: 15px;
+            opacity: 0.12;
+            color: #ffffff;
+            font-size: 1.2rem;
+            overflow: hidden;
+        }
+
+        .bg-icons i {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card-container {
+            position: relative;
+            z-index: 1;
+            background-color: var(--card-bg);
+            width: 100%;
+            max-width: 400px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            text-align: center;
+            padding-bottom: 30px;
+            height: fit-content;
+            margin-top: 20px;
+            border: 1px solid #333;
+        }
+
+        /* Header Section */
+        .header {
+            background: linear-gradient(135deg, #1a1a1a, #000000);
+            height: 120px;
+            position: relative;
+            border-bottom: 2px solid #cc0000;
+        }
+
+        .profile-img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 3px solid #ffffff;
+            box-shadow: 0 0 15px rgba(204, 0, 0, 0.4);
+            background-color: #000;
+            object-fit: cover;
+            position: absolute;
+            bottom: -60px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        /* Content Section */
+        .content {
+            margin-top: 70px;
+            padding: 0 20px;
+        }
+
+        h1 {
+            color: var(--text-color);
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+
+        .title {
+            color: var(--primary-color);
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+
+        .bio {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin-bottom: 25px;
+        }
+
+        /* Save Contact Button */
+        .save-contact {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(204, 0, 0, 0.4);
+            transition: transform 0.2s;
+        }
+
+        .save-contact:hover {
+            transform: scale(1.05);
+        }
+
+        /* Buttons/Links Layout */
+        .links-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .link-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+            border-radius: 12px;
+            text-decoration: none;
+            color: white;
+            font-weight: 600;
+            transition: transform 0.2s, opacity 0.2s;
+            gap: 10px;
+            font-size: 1rem;
+            position: relative;
+            border: 1px solid #333;
+        }
+
+        .link-btn:hover {
+            transform: translateY(-2px);
+            opacity: 0.9;
+        }
+
+        /* --- Brand Colors --- */
+
+        .payment {
+            background-color: #1a1a1a;
+        }
+
+        /* LinkedIn (Blue) */
+        .linkedin {
+            background-color: #0077b5;
+        }
+
+        /* GitHub (Black/Dark Gray) */
+        .github {
+            background-color: #24292e;
+        }
+
+        /* Instagram (Gradient) */
+        .instagram {
+            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+        }
+
+        /* Facebook (Blue) */
+        .facebook {
+            background-color: #1877f2;
+        }
+
+        /* Telegram (Light Blue) */
+        .telegram {
+            background-color: #0088cc;
+        }
+
+        /* Email (Red) */
+        .email {
+            background-color: #ea4335;
+        }
+
+        /* TikTok */
+        .tiktok {
+            background-color: #1a1a1a;
+        }
+
+        .jiji {
+            background-color: #00b53f;
+        }
+
+        .snapchat {
+            background-color: #D4B400;
+            color: white;
+        }
+
+        /* Payment Dropdown Styles */
+        .payment-wrapper {
+            position: relative;
+        }
+
+        .payment-dropdown {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            background-color: #1a1a1a;
+            border-radius: 0 0 12px 12px;
+            padding: 0 10px;
+        }
+
+        .payment-dropdown.show {
+            max-height: 400px;
+            /* Enough for a few options */
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+        }
+
+        .bank-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            background: #222;
+            border-radius: 8px;
+            margin-top: 8px;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            transition: transform 0.1s;
+        }
+
+        .bank-item:active {
+            transform: scale(0.98);
+        }
+
+        .bank-info {
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+        }
+
+        .bank-name {
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: #ffffff;
+        }
+
+        .account-num {
+            font-size: 0.85rem;
+            color: #aaaaaa;
+            margin-top: 2px;
+            font-family: monospace;
+        }
+
+        .copy-icon {
+            color: #666;
+            transition: color 0.2s;
+        }
+
+        .bank-item:hover .copy-icon {
+            color: var(--primary-color);
+        }
+
+        /* Bank Item Specific Styling */
+        .bank-item .bank-logo {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 15px;
+            object-fit: cover;
+            border: 2px solid #333;
+            background-color: #222;
+        }
+
+        .bank-item.colored {
+            color: white;
+            border: none;
+        }
+
+        .bank-item.colored .bank-name {
+            color: white;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .bank-item.colored .account-num {
+            color: rgba(255, 255, 255, 0.9);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .bank-item.colored .copy-icon {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .bank-item.colored:hover .copy-icon {
+            color: white;
+        }
+
+        /* Specific Bank Colors */
+        .bank-cbe {
+            background-color: #95298e;
+        }
+
+        .bank-telebirr {
+            background: linear-gradient(135deg, #106197 0%, #106197 60%, #ffffff 100%);
+        }
+
+        /* Adjust text for Telebirr slightly if needed, but shadow helps */
+        .bank-telebirr .bank-name,
+        .bank-telebirr .account-num {
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+        }
+
+        .bank-awash {
+            background: linear-gradient(135deg, #120a80, #ffac3d);
+        }
+
+        .bank-zemen {
+            background: linear-gradient(135deg, #ff0000, #000000);
+        }
+
+
+        /* Toast Notification */
+        #toast {
+            visibility: hidden;
+            min-width: 250px;
+            margin-left: -125px;
+            background-color: #cc0000;
+            color: #fff;
+            text-align: center;
+            border-radius: 50px;
+            padding: 16px;
+            position: fixed;
+            z-index: 1000;
+            left: 50%;
+            bottom: 30px;
+            font-size: 16px;
+            box-shadow: 0 5px 15px rgba(204, 0, 0, 0.3);
+            opacity: 0;
+            transition: opacity 0.5s, bottom 0.5s;
+        }
+
+        #toast.show {
+            visibility: visible;
+            opacity: 1;
+            bottom: 50px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="bg-icons">
+        <i class="fa-solid fa-car"></i><i class="fa-solid fa-gas-pump"></i><i class="fa-solid fa-wrench"></i><i class="fa-solid fa-truck"></i><i class="fa-solid fa-road"></i><i class="fa-solid fa-gears"></i><i class="fa-solid fa-car-side"></i><i class="fa-solid fa-gauge-high"></i>
+        <i class="fa-solid fa-gears"></i><i class="fa-solid fa-car-side"></i><i class="fa-solid fa-gauge-high"></i><i class="fa-solid fa-car"></i><i class="fa-solid fa-gas-pump"></i><i class="fa-solid fa-truck"></i><i class="fa-solid fa-road"></i><i class="fa-solid fa-wrench"></i>
+        <i class="fa-solid fa-truck"></i><i class="fa-solid fa-road"></i><i class="fa-solid fa-car"></i><i class="fa-solid fa-gauge-high"></i><i class="fa-solid fa-wrench"></i><i class="fa-solid fa-car-side"></i><i class="fa-solid fa-gears"></i><i class="fa-solid fa-gas-pump"></i>
+        <i class="fa-solid fa-gauge-high"></i><i class="fa-solid fa-wrench"></i><i class="fa-solid fa-gears"></i><i class="fa-solid fa-road"></i><i class="fa-solid fa-car-side"></i><i class="fa-solid fa-car"></i><i class="fa-solid fa-gas-pump"></i><i class="fa-solid fa-truck"></i>
+        <i class="fa-solid fa-road"></i><i class="fa-solid fa-car"></i><i class="fa-solid fa-truck"></i><i class="fa-solid fa-gears"></i><i class="fa-solid fa-gauge-high"></i><i class="fa-solid fa-gas-pump"></i><i class="fa-solid fa-wrench"></i><i class="fa-solid fa-car-side"></i>
+        <i class="fa-solid fa-car-side"></i><i class="fa-solid fa-gears"></i><i class="fa-solid fa-gas-pump"></i><i class="fa-solid fa-wrench"></i><i class="fa-solid fa-truck"></i><i class="fa-solid fa-road"></i><i class="fa-solid fa-gauge-high"></i><i class="fa-solid fa-car"></i>
+        <i class="fa-solid fa-wrench"></i><i class="fa-solid fa-gauge-high"></i><i class="fa-solid fa-road"></i><i class="fa-solid fa-car-side"></i><i class="fa-solid fa-car"></i><i class="fa-solid fa-gears"></i><i class="fa-solid fa-truck"></i><i class="fa-solid fa-gas-pump"></i>
+        <i class="fa-solid fa-gas-pump"></i><i class="fa-solid fa-truck"></i><i class="fa-solid fa-car-side"></i><i class="fa-solid fa-gas-pump"></i><i class="fa-solid fa-gears"></i><i class="fa-solid fa-wrench"></i><i class="fa-solid fa-car"></i><i class="fa-solid fa-road"></i>
+        <i class="fa-solid fa-car"></i><i class="fa-solid fa-road"></i><i class="fa-solid fa-gauge-high"></i><i class="fa-solid fa-truck"></i><i class="fa-solid fa-wrench"></i><i class="fa-solid fa-car-side"></i><i class="fa-solid fa-gas-pump"></i><i class="fa-solid fa-gears"></i>
+        <i class="fa-solid fa-gears"></i><i class="fa-solid fa-car-side"></i><i class="fa-solid fa-wrench"></i><i class="fa-solid fa-car"></i><i class="fa-solid fa-road"></i><i class="fa-solid fa-gauge-high"></i><i class="fa-solid fa-truck"></i><i class="fa-solid fa-gas-pump"></i>
+        <i class="fa-solid fa-truck"></i><i class="fa-solid fa-gas-pump"></i><i class="fa-solid fa-car"></i><i class="fa-solid fa-gears"></i><i class="fa-solid fa-car-side"></i><i class="fa-solid fa-road"></i><i class="fa-solid fa-wrench"></i><i class="fa-solid fa-gauge-high"></i>
+        <i class="fa-solid fa-road"></i><i class="fa-solid fa-wrench"></i><i class="fa-solid fa-truck"></i><i class="fa-solid fa-car-side"></i><i class="fa-solid fa-gas-pump"></i><i class="fa-solid fa-car"></i><i class="fa-solid fa-gauge-high"></i><i class="fa-solid fa-gears"></i>
+    </div>
+
+    <div class="card-container">
+        <div class="header">
+            <img src="Headshot.jpg" class="profile-img">
+        </div>
+
+        <div class="content">
+            <h1>Abel Mesfin Teshome</h1>
+            <p class="title">Car Dealers and Shop</p>
+            <p class="bio">Trusted Seller</p>
+
+            <a href="https://vcard.link/card/IyNb" target="_blank" class="save-contact">
+                <i class="fas fa-user-plus"></i> Save Contact
+            </a>
+
+            <div class="links-container">
+                <div class="payment-wrapper">
+                    <a href="javascript:void(0)" class="link-btn payment" onclick="togglePayment()">
+                        <span>💲Payment Methods</span>
+                        <i class="fas fa-chevron-down" style="position: absolute; right: 15px; font-size: 0.9rem;"></i>
+                    </a>
+
+                    <div class="payment-dropdown" id="paymentDropdown">
+                        <!-- CBE -->
+                        <div class="bank-item bank-cbe colored" onclick="copyToClipboard('1000562604735', 'CBE')">
+                            <img src="cbe.png" alt="CBE" class="bank-logo">
+                            <div class="bank-info">
+                                <span class="bank-name">CBE</span>
+                                <span class="account-num">1000562604735</span>
+                            </div>
+                            <i class="far fa-copy copy-icon"></i>
+                        </div>
+
+                        <!-- Telebirr 1 -->
+                        <div class="bank-item bank-telebirr colored"
+                            onclick="copyToClipboard('0939911098', 'Telebirr')">
+                            <img src="telebirr..png" alt="Telebirr" class="bank-logo">
+                            <div class="bank-info">
+                                <span class="bank-name">Telebirr</span>
+                                <span class="account-num">0939911098</span>
+                            </div>
+                            <i class="far fa-copy copy-icon"></i>
+                        </div>
+
+                        <!-- Telebirr 2 -->
+                        <div class="bank-item bank-telebirr colored"
+                            onclick="copyToClipboard('0965114443', 'Telebirr')">
+                            <img src="telebirr..png" alt="Telebirr" class="bank-logo">
+                            <div class="bank-info">
+                                <span class="bank-name">Telebirr</span>
+                                <span class="account-num">0965114443</span>
+                            </div>
+                            <i class="far fa-copy copy-icon"></i>
+                        </div>
+                    </div>
+                </div>
+
+<a href="https://www.instagram.com/yanba4e/" target="_blank" class="link-btn instagram">
+                    <i class="fab fa-instagram"></i> Instagram
+                </a>
+
+                <a href="https://www.tiktok.com/@nati_car_decor" target="_blank" class="link-btn tiktok">
+                    <i class="fab fa-tiktok"></i> TikTok 1
+                </a>
+
+                <a href="https://www.tiktok.com/@autohubet" target="_blank" class="link-btn tiktok">
+                    <i class="fab fa-tiktok"></i> TikTok 2
+                </a>
+
+                <a href="https://snapchat.com/t/0xtHUEQB" target="_blank" class="link-btn snapchat">
+                    <i class="fab fa-snapchat-ghost"></i> Snapchat
+                </a>
+
+            </div>
+        </div>
+    </div>
+
+
+
+    <div id="toast">Details copied to clipboard!</div>
+
+    <script>
+        function togglePayment() {
+            const dropdown = document.getElementById('paymentDropdown');
+            dropdown.classList.toggle('show');
+            const icon = document.querySelector('.payment .fa-chevron-down');
+            if (dropdown.classList.contains('show')) {
+                icon.style.transform = 'rotate(180deg)';
+            } else {
+                icon.style.transform = 'rotate(0deg)';
+            }
+            icon.style.transition = 'transform 0.3s';
+        }
+
+        function copyToClipboard(text, bankName) {
+            navigator.clipboard.writeText(text).then(function () {
+                showToast(`${bankName} details copied!`);
+            }, function (err) {
+                console.error('Could not copy text: ', err);
+            });
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById("toast");
+            toast.textContent = message;
+            toast.className = "show";
+            setTimeout(function () { toast.className = toast.className.replace("show", ""); }, 3000);
+        }
+    </script>
+</body>
+
+</html>
